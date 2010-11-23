@@ -1,0 +1,11 @@
+What is it?
+===========
+
+test_kmod is a simple tool that takes a compiled .ko module, "loads" it using
+mmap() and apply relocations the same way it is done by the Linux kernel. The
+undefined external symbols are them resolved to "stub" functions implemented by
+test_kmod itself (see stubs.c).
+
+This allows controlling the module inputs, and can be useful for unit testing,
+debugging (using GDB), memory checking (using valgrind) and code coverage
+(using gcov+lcov).
