@@ -58,11 +58,11 @@ DECL_DATA(jiffies);
 struct kmem_cache *kmalloc_caches[SLUB_PAGE_SHIFT];
 DECL_DATA(kmalloc_caches);
 
-
 struct dentry *bt_debugfs = STUB_ADDR;
 DECL_DATA(bt_debugfs);
 
-struct task_struct *current_task;
+static struct task_struct _current_task;
+struct task_struct *current_task = &_current_task;
 DECL_DATA(current_task);
 
 struct kernel_param_ops param_ops_bool;
@@ -385,13 +385,6 @@ int del_timer(struct timer_list *timer)
 }
 DECL_FUNC(del_timer);
 
-int del_timer_sync(struct timer_list *timer)
-{
-	printf("%s: timer=%p\n", __FUNCTION__, timer);
-	return -1;
-}
-DECL_FUNC(del_timer_sync);
-
 int memcpy_fromiovec(unsigned char *kdata, struct iovec *iov, int len)
 {
 	printf("%s: kdata=%p, iov=%p, len=%d\n", __FUNCTION__, kdata, iov, len);
@@ -464,53 +457,17 @@ int hci_unregister_proto(struct hci_proto *hproto)
 }
 DECL_FUNC(hci_unregister_proto);
 
-void _raw_write_lock_bh(rwlock_t *lock)
+void local_bh_enable(void)
 {
-	printf("%s: lock=%p\n", __FUNCTION__, lock);
+	printf("%s\n", __FUNCTION__);
 }
-DECL_FUNC(_raw_write_lock_bh);
+DECL_FUNC(local_bh_enable);
 
-void _raw_read_lock(rwlock_t *lock)
+void local_bh_disable(void)
 {
-	printf("%s: lock=%p\n", __FUNCTION__, lock);
+	printf("%s\n", __FUNCTION__);
 }
-DECL_FUNC(_raw_read_lock);
-
-void _raw_read_lock_bh(rwlock_t *lock)
-{
-	printf("%s: lock=%p\n", __FUNCTION__, lock);
-}
-DECL_FUNC(_raw_read_lock_bh);
-
-void _raw_write_unlock_bh(rwlock_t *lock)
-{
-	printf("%s: lock=%p\n", __FUNCTION__, lock);
-}
-DECL_FUNC(_raw_write_unlock_bh);
-
-void _raw_read_unlock_bh(rwlock_t *lock)
-{
-	printf("%s: lock=%p\n", __FUNCTION__, lock);
-}
-DECL_FUNC(_raw_read_unlock_bh);
-
-void _raw_spin_lock(raw_spinlock_t *lock)
-{
-	printf("%s: lock=%p\n", __FUNCTION__, lock);
-}
-DECL_FUNC(_raw_spin_lock);
-
-void _raw_spin_lock_bh(raw_spinlock_t *lock)
-{
-	printf("%s: lock=%p\n", __FUNCTION__, lock);
-}
-DECL_FUNC(_raw_spin_lock_bh);
-
-void _raw_spin_unlock_bh(raw_spinlock_t *lock)
-{
-	printf("%s: lock=%p\n", __FUNCTION__, lock);
-}
-DECL_FUNC(_raw_spin_unlock_bh);
+DECL_FUNC(local_bh_disable);
 
 int param_get_bool(char *buffer, const struct kernel_param *kp)
 {
